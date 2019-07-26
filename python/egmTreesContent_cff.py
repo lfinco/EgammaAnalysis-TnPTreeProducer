@@ -143,6 +143,8 @@ PhoProbeVariablesToStore = cms.PSet(
     ph_sieie         = cms.string("full5x5_sigmaIetaIeta"),
     ph_sieip         = cms.InputTag("photonIDValueMapProducer:phoFull5x5SigmaIEtaIPhi"),
     ph_ESsigma       = cms.InputTag("photonIDValueMapProducer:phoESEffSigmaRR"),
+#    ph_sieip         = cms.string("full5x5_sigmaIetaIphi"),
+#    ph_ESsigma       = cms.string("ESEffSigmaRR"),
     ph_hoe           = cms.string("hadronicOverEm"),
 
 #iso
@@ -150,6 +152,11 @@ PhoProbeVariablesToStore = cms.PSet(
     ph_neuIso   = cms.InputTag("photonIDValueMapProducer:phoNeutralHadronIsolation"),
     ph_phoIso   = cms.InputTag("photonIDValueMapProducer:phoPhotonIsolation"),
     ph_chWorIso = cms.InputTag("photonIDValueMapProducer:phoWorstChargedIsolation"), 
+
+#    ph_chIso    = cms.string("ChargedHadronIso"),
+#    ph_neuIso   = cms.InputTag("NeutralHadronIso"),
+#    ph_phoIso   = cms.InputTag("PhotonIso"),
+#    ph_chWorIso = cms.InputTag("WorstChargedIsolation"), 
 
 #pho mva
 

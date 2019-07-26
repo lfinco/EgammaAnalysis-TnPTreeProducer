@@ -1,15 +1,17 @@
 import FWCore.ParameterSet.Config as cms
 
-
 filesMiniAOD_Preliminary2018 = {
     'mc' :  cms.untracked.vstring(
 #        '/store/mc/RunIISpring18MiniAOD/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/100X_upgrade2018_realistic_v10-v2/100000/6815ED2D-7530-E811-90C0-FA163E27991E.root',
 #        '/store/mc/RunIISpring18MiniAOD/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/100X_upgrade2018_realistic_v10-v2/100000/801BEA3C-9C2F-E811-AFA4-02163E015DB8.root',
-        '/store/mc/RunIISpring18MiniAOD/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/100X_upgrade2018_realistic_v10-v2/100000/6815ED2D-7530-E811-90C0-FA163E27991E.root'
+#        '/store/mc/RunIISpring18MiniAOD/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/100X_upgrade2018_realistic_v10-v2/100000/6815ED2D-7530-E811-90C0-FA163E27991E.root'
+        '/store/relval/CMSSW_10_6_1_patch1/RelValZEE_13/MINIAODSIM/PU25ns_106X_mc2017_realistic_v7-v1/20000/411E2CE6-5D35-214C-B8A9-70F17FC38D3B.root'
+#        '/store/relval/CMSSW_11_0_0_pre2/RelValProdZEE_13_pmx25ns/AODSIM/PUpmx25ns_106X_mc2017_realistic_v5-v1/10000/B48B6E89-651E-0746-AA65-460074FE86AC.root'
         ),
 
     'data' : cms.untracked.vstring(
-        '/store/data/Run2018A/EGamma/MINIAOD/PromptReco-v1/000/315/252/00000/40343760-464B-E811-ACC9-02163E00B0CB.root',
+#        '/store/data/Run2018A/EGamma/MINIAOD/PromptReco-v1/000/315/252/00000/40343760-464B-E811-ACC9-02163E00B0CB.root',
+        '/store/relval/CMSSW_10_6_1_patch1/DoubleEG/MINIAOD/106X_dataRun2_v17_RelVal_2017B-v1/20000/F8F6FCA4-51DB-AB46-A793-C5DDEA7E8CC7.root'
         )
 }
 

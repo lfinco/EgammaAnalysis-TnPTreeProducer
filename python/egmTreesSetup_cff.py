@@ -208,6 +208,7 @@ def setSequences(process, options):
     process.pho_sequence = cms.Sequence(
         process.goodPhotons               +
         process.egmPhotonIDSequence       +
+        process.photonIDValueMapProducer +
         #process.probePhoCutBasedLoose     +
         #process.probePhoCutBasedMedium    +
         #process.probePhoCutBasedTight     +

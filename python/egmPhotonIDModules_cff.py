@@ -22,11 +22,13 @@ def setIDs(process, options):
                      'RecoEgamma.PhotonIdentification.Identification.cutBasedPhotonID_Fall17_94X_V1_cff',
                      'RecoEgamma.PhotonIdentification.Identification.mvaPhotonID_Fall17_94X_V1_cff',
                      'RecoEgamma.PhotonIdentification.Identification.mvaPhotonID_Fall17_94X_V2_cff',
-                     'RecoEgamma.PhotonIdentification.Identification.cutBasedPhotonID_Fall17_100X_V2_cff'
+                     'RecoEgamma.PhotonIdentification.Identification.cutBasedPhotonID_Fall17_94X_V2_cff'
                      ]
                  
     for idmod in my_id_modules:
         setupAllVIDIdsInModule(process, idmod, setupVIDPhotonSelection)
+
+    process.load("RecoEgamma.PhotonIdentification.photonIDValueMapProducer_cff")  
 
     process.egmPhotonIDs.physicsObjectSrc        = cms.InputTag(options['PHOTON_COLL'])
     process.photonIDValueMapProducer.srcMiniAOD  = cms.InputTag(options['PHOTON_COLL'])

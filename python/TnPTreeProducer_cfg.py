@@ -24,7 +24,7 @@ varOptions.register(
     )
 
 varOptions.register(
-    "doPhoID", True,
+    "doPhoID", False,
     VarParsing.multiplicity.singleton,
     VarParsing.varType.bool,
     "Include tree for photon ID SF"
@@ -38,7 +38,7 @@ varOptions.register(
     )
 
 varOptions.register(
-    "doRECO", False,
+    "doRECO", True,
     VarParsing.multiplicity.singleton,
     VarParsing.varType.bool,
     "Include tree for Reco SF"
@@ -60,10 +60,10 @@ varOptions.register(
     )
 
 varOptions.register(
-    #"GT","auto",
+    "GT","auto",
     #"GT","101X_dataRun2_Prompt_v9",
     #"GT","94X_dataRun2_ReReco_EOY17_v6",
-    "GT","94X_mc2017_realistic_v12",
+    #"GT","94X_mc2017_realistic_v12",
     VarParsing.multiplicity.singleton,
     VarParsing.varType.string,
     "Global Tag to be used"
@@ -78,7 +78,7 @@ varOptions.register(
     )
 
 varOptions.register(
-    "isAOD", True,
+    "isAOD", False,
     VarParsing.multiplicity.singleton,
     VarParsing.varType.bool,
     "use AOD"
@@ -137,7 +137,7 @@ if (varOptions.isMC):
 #    options['TnPPATHS']            = cms.vstring("HLT_Ele27_eta2p1_WPTight_Gsf_v*") #FOR 2016
 #    options['TnPHLTTagFilters']    = cms.vstring("hltEle27erWPTightGsfTrackIsoFilter") #FOR 2016
 #     options['HLTFILTERTOMEASURE']  = cms.vstring("hltEle27erWPTightGsfTrackIsoFilter") #FOR 2016
-    options['TnPPATHS']            = cms.vstring("HLT_Ele32_WPTight_Gsf_L1DoubleEG_v*")
+    options['TnPPATHS']            = cms.vstring("HLT_Ele32_WPTight_Gsf*")
     options['TnPHLTTagFilters']    = cms.vstring("hltEle32L1DoubleEGWPTightGsfTrackIsoFilter","hltEGL1SingleEGOrFilter")
     #options['TnPHLTTagFilters']    = cms.vstring("hltEle32L1DoubleEGWPTightGsfTrackIsoFilter")
     options['TnPHLTProbeFilters']  = cms.vstring()
@@ -159,10 +159,10 @@ if varOptions.GT != "auto" :
 ###################################################################
 ## Define input files for test local run
 ###################################################################
-#from EgammaAnalysis.TnPTreeProducer.etc.tnpInputTestFiles_cff import filesMiniAOD_Preliminary2018 as inputs
+from EgammaAnalysis.TnPTreeProducer.etc.tnpInputTestFiles_cff import filesMiniAOD_Preliminary2018 as inputs
 #if options['useAOD'] : from EgammaAnalysis.TnPTreeProducer.etc.tnpInputTestFiles_cff import filesAOD_23Sep2016 as inputs #switch to 2017 samples if want to cmsRun on AOD
 #if options['useAOD'] : 
-from EgammaAnalysis.TnPTreeProducer.etc.tnpInputTestFiles_cff import filesAOD_Preliminary2017 as inputs #switch to 2017 samples if want to cmsRun on AOD
+#from EgammaAnalysis.TnPTreeProducer.etc.tnpInputTestFiles_cff import filesAOD_Preliminary2017 as inputs #switch to 2017 samples if want to cmsRun on AOD
 #if options['useAOD'] : from EgammaAnalysis.TnPTreeProducer.etc.tnpInputTestFiles_cff import filesAOD_empty as inputs #switch to 2017 samples if want to cmsRun on AOD
     
 options['INPUT_FILE_NAME'] = inputs['data']
@@ -186,8 +186,6 @@ process.load('FWCore.MessageService.MessageLogger_cfi')
 from Configuration.AlCa.GlobalTag import GlobalTag
 process.GlobalTag = GlobalTag(process.GlobalTag, options['GLOBALTAG'] , '')
 
-import EgammaAnalysis.TnPTreeProducer.egmTreesSetup_cff as tnpSetup
-tnpSetup.setupTreeMaker(process,options)
 
 
 
@@ -212,6 +210,8 @@ if options['DoTrigger'] : print "  -- Producing HLT (trigger ele) efficiency tre
 if options['DoRECO']    : print "  -- Producing RECO SF tree        -- "
 if options['DoEleID']   : print "  -- Producing electron SF tree    -- "
 if options['DoPhoID']   : print "  -- Producing photon SF tree      -- "
+import EgammaAnalysis.TnPTreeProducer.egmTreesSetup_cff as tnpSetup
+tnpSetup.setupTreeMaker(process,options)
 
     
 ###################################################################
@@ -229,6 +229,7 @@ if options['DoTrigger'] : process.tnpPairs_sequence *= process.tnpPairingEleHLT
 if options['DoRECO']    : process.tnpPairs_sequence *= process.tnpPairingEleRec
 if options['DoEleID']   : process.tnpPairs_sequence *= process.tnpPairingEleIDs
 if options['DoPhoID']   : process.tnpPairs_sequence *= process.tnpPairingPhoIDs
+
 
 ##########################################################################
 ## TnP Trees
