@@ -2,14 +2,14 @@ from CRABClient.UserUtilities import config, getUsernameFromSiteDB
 import sys
 config = config()
 
-submitVersion = "Aug2019Jamboree"
+submitVersion = "ntuple_2017_UltraLegacy"
 
 doEleTree = 'doEleID=True'
 doPhoTree = 'doPhoID=False'
 doHLTTree = 'doTrigger=False'
-doRECO    = 'doRECO=True'
+doRECO    = 'doRECO=False'
 
-mainOutputDir = '/store/group/phys_egamma/swmukher/%s' % submitVersion
+mainOutputDir = '/store/group/phys_egamma/swmukher/UL/%s' % submitVersion
 
 config.General.transferLogs = False
 
@@ -17,7 +17,6 @@ config.JobType.pluginName  = 'Analysis'
 
 # Name of the CMSSW configuration file
 config.JobType.psetName  = '/afs/cern.ch/user/s/swmukher/work/egammaNtuple/try/CMSSW_10_6_1_patch1/src/EgammaAnalysis/TnPTreeProducer/python/TnPTreeProducer_cfg.py'
-
 config.Data.allowNonValidInputDataset = False
 
 config.Data.inputDBS = 'global'
@@ -46,28 +45,29 @@ if __name__ == '__main__':
             print "Failed submitting task: %s" % (cle)
 
 
-    ##### submit MC
-    config.Data.outLFNDirBase = '%s/%s/' % (mainOutputDir,'mc')
-    config.Data.splitting     = 'FileBased'
-    config.Data.unitsPerJob   = 20
-    config.JobType.pyCfgParams  = ['isMC=True','isAOD=True',doEleTree,doPhoTree,doHLTTree,doRECO]
+    ##### now submit DATA
+    config.Data.outLFNDirBase = '%s/%s/' % (mainOutputDir,'data')
+    config.Data.splitting     = 'LumiBased'
+    #    config.Data.lumiMask      = 'https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions17/13TeV/Final/Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt'
+    config.Data.lumiMask      = 'https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions17/13TeV/ReReco/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_v1.txt'
+    config.Data.unitsPerJob   = 90
+    config.JobType.pyCfgParams  = ['isMC=False','isAOD=False',doEleTree,doPhoTree,doHLTTree,doRECO]
 
 
-#    config.General.requestName  = 'DY1JetsToLL_M50_madgraphMLM'
-#    config.Data.inputDataset    = '/DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17DRPremix-PU2017_94X_mc2017_realistic_v11-v1/AODSIM'
-#    submit(config) 
+    config.General.requestName  = 'SingleElectron_29Jun2019_2017UL_C_TRY4'
+    config.Data.inputDataset    = '/SingleElectron/Run2017C-29Jun2019_UL2017validation-v1/MINIAOD'
+    submit(config)
 
-    config.General.requestName  = 'dyjets'
-    config.Data.inputDataset    = '/DYJets_incl_MLL-50_TuneCP5_14TeV-madgraphMLM-pythia8/Run3Summer19DRPremix-2023Scenario_106X_mcRun3_2023_realistic_v3-v1/AODSIM'
-    submit(config) 
+    config.General.requestName  = 'SingleElectron_29Jun2019_2017UL_F_TRY4'
+    config.Data.inputDataset    = '/SingleElectron/Run2017F-29Jun2019_UL2017validation-v1/MINIAOD'
+    submit(config)
 
-    config.General.requestName  = 'ttbar'
-    config.Data.inputDataset    = '/TTbar_14TeV_TuneCP5_Pythia8/Run3Summer19DR-106X_mcRun3_2023_realistic_v3-v2/AODSIM'
-    submit(config) 
 
-#    config.General.requestName  = 'DYJetsToLL_M50_amcatnloFXFX'
-#    config.Data.inputDataset    = '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17DRPremix-PU2017_94X_mc2017_realistic_v11-v1/AODSIM'
-#    submit(config) 
+
+#    config.General.requestName  = 'RunF_2017'
+#    config.Data.inputDataset    = '/SingleElectron/Run2017F-17Nov2017-v1/AOD'
+#    submit(config)
+
 
 
 

@@ -5,11 +5,18 @@ filesMiniAOD_Preliminary2018 = {
     'mc' :  cms.untracked.vstring(
 #        '/store/mc/RunIISpring18MiniAOD/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/100X_upgrade2018_realistic_v10-v2/100000/6815ED2D-7530-E811-90C0-FA163E27991E.root',
 #        '/store/mc/RunIISpring18MiniAOD/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/100X_upgrade2018_realistic_v10-v2/100000/801BEA3C-9C2F-E811-AFA4-02163E015DB8.root',
-        '/store/mc/RunIISpring18MiniAOD/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/100X_upgrade2018_realistic_v10-v2/100000/6815ED2D-7530-E811-90C0-FA163E27991E.root'
+#        '/store/mc/RunIISpring18MiniAOD/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/100X_upgrade2018_realistic_v10-v2/100000/6815ED2D-7530-E811-90C0-FA163E27991E.root'
+#        '/store/relval/CMSSW_10_6_1_patch1/RelValZEE_13/MINIAODSIM/PU25ns_106X_mc2017_realistic_v7-v1/20000/411E2CE6-5D35-214C-B8A9-70F17FC38D3B.root'
+#        '/store/relval/CMSSW_10_6_1_patch1/RelValZEE_13/MINIAODSIM/106X_mc2017_realistic_v7-v1/20000/88D68827-EEFE-BA40-88B4-E7F2F5FEA083.root'
+#        '/store/relval/CMSSW_10_6_1/RelValZEE_13/MINIAODSIM/PU25ns_106X_mc2017_realistic_v6_HS-v1/10000/FA941F11-B21C-844C-B6B3-9FDB6D198B0F.root'
+#        '/store/mc/Run3Summer19DRPremix/DYJets_incl_MLL-50_TuneCP5_14TeV-madgraphMLM-pythia8/AODSIM/2023Scenario_106X_mcRun3_2023_realistic_v3-v1/270000/D5352221-212F-4C4A-8CD7-844706702C4D.root'
+        '/store/mc/Run3Summer19DRPremix/DYJets_incl_MLL-50_TuneCP5_14TeV-madgraphMLM-pythia8/AODSIM/2023Scenario_106X_mcRun3_2023_realistic_v3-v1/270000/F4ACA458-EE17-D74E-8EDD-BC8932970829.root'
         ),
 
     'data' : cms.untracked.vstring(
-        '/store/data/Run2018A/EGamma/MINIAOD/PromptReco-v1/000/315/252/00000/40343760-464B-E811-ACC9-02163E00B0CB.root',
+#        '/store/data/Run2018A/EGamma/MINIAOD/PromptReco-v1/000/315/252/00000/40343760-464B-E811-ACC9-02163E00B0CB.root',
+#        '/store/relval/CMSSW_10_6_1_patch1/DoubleEG/MINIAOD/106X_dataRun2_v17_RelVal_2017B-v1/20000/F8F6FCA4-51DB-AB46-A793-C5DDEA7E8CC7.root'
+        '/store/data/Run2017F/SingleElectron/MINIAOD/29Jun2019_UL2017validation-v1/260000/AE5061E0-C8EC-3D4E-951D-C2B554EE4606.root'
         )
 }
 

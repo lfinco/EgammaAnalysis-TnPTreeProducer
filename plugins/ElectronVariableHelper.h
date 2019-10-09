@@ -194,11 +194,12 @@ void ElectronVariableHelper<T>::produce(edm::Event & iEvent, const edm::EventSet
     pfPtVals.push_back(pfpt);
 
     // Conversion vertex fit
-    reco::ConversionRef convRef = ConversionTools::matchedConversion(*probe, conversions, beamSpot->position());
+    //    reco::ConversionRef convRef = ConversionTools::matchedConversion(*probe, conversions, beamSpot->position());
+    reco::Conversion const* convRef = ConversionTools::matchedConversion(*probe,*conversions, beamSpot->position());
 
     float convVtxFitProb = -1.;
-    if(!convRef.isNull()) {
-        const reco::Vertex &vtx = convRef.get()->conversionVertex();
+    if(!convRef==0) {
+        const reco::Vertex &vtx = convRef->conversionVertex();
         if (vtx.isValid()) {
             convVtxFitProb = TMath::Prob( vtx.chi2(),  vtx.ndof());
         }
@@ -251,6 +252,8 @@ void ElectronVariableHelper<T>::produce(edm::Event & iEvent, const edm::EventSet
   store("kfchi2", kfchi2Vals, probes, iEvent);
   store("ioemiop", ioemiopVals, probes, iEvent);
   store("5x5circularity", ocVals, probes, iEvent);
+  store("gsfhits", gsfhVals, probes, iEvent);
+
 
 
 }

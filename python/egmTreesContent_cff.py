@@ -11,6 +11,7 @@ ZVariablesToStore = cms.PSet(
     mass  = cms.string("mass"),
     )   
 
+print ("next step SCProbeVariablesToStore")
 SCProbeVariablesToStore = cms.PSet(
     sc_eta    = cms.string("eta"),
     sc_phi    = cms.string("phi"),
@@ -20,6 +21,8 @@ SCProbeVariablesToStore = cms.PSet(
     sc_e      = cms.string("energy"),
     sc_tkIso  = cms.InputTag("recoEcalCandidateHelper:scTkIso"),
     )
+
+print (" ---- SCProbeVariablesToStore worked")
 
 EleProbeVariablesToStore = cms.PSet(
     el_eta    = cms.string("eta"),
