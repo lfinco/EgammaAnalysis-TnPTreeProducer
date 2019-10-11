@@ -150,16 +150,10 @@ else:
     options['OUTPUT_FILE_NAME']    = "TnPTree_data.root"
 
 
-options['TnPPATHS']            = cms.vstring("HLT_Ele32_WPTight_Gsf_L1DoubleEG_v*")#works for data UL2017
-options['TnPHLTTagFilters']    = cms.vstring("hltEle32L1DoubleEGWPTightGsfTrackIsoFilter","hltEGL1SingleEGOrFilter")
+options['TnPPATHS']            = cms.vstring("HLT_Ele32_WPTight_Gsf*")#UL 2018
+options['TnPHLTTagFilters']    = cms.vstring()
 options['TnPHLTProbeFilters']  = cms.vstring()
-options['HLTFILTERTOMEASURE']  = cms.vstring("hltEle32L1DoubleEGWPTightGsfTrackIsoFilter")
-
-#MC
-#options['TnPPATHS']            = cms.vstring("HLT*")
-#options['TnPHLTTagFilters']    = cms.vstring()
-#options['TnPHLTProbeFilters']  = cms.vstring()
-#options['HLTFILTERTOMEASURE']  = cms.vstring()
+options['HLTFILTERTOMEASURE']  = cms.vstring()
 
 ###options['GLOBALTAG']           = 'auto:run2_data'
 
@@ -237,9 +231,9 @@ if options['DoRECO']                          : process.cand_sequence += process
 
 process.tnpPairs_sequence = cms.Sequence()
 if options['DoTrigger'] : process.tnpPairs_sequence *= process.tnpPairingEleHLT
-print ("next step process.tnpPairingEleRec ")
+#print ("next step process.tnpPairingEleRec ")
 if options['DoRECO']    : process.tnpPairs_sequence *= process.tnpPairingEleRec
-print (" --- process.tnpPairingEleRec successful")
+#print (" --- process.tnpPairingEleRec successful")
 
 if options['DoEleID']   : process.tnpPairs_sequence *= process.tnpPairingEleIDs
 if options['DoPhoID']   : process.tnpPairs_sequence *= process.tnpPairingPhoIDs
@@ -263,7 +257,7 @@ process.tnpEleTrig = cms.EDAnalyzer("TagProbeFitTreeProducer",
                                         passingTight94X   = cms.InputTag("probeEleCutBasedTight94X" ),
                                         ),
                                     )
-print ("next step tnpEleReco, calling TagProbeFitTreeProducer")
+#print ("next step tnpEleReco, calling TagProbeFitTreeProducer")
 process.tnpEleReco = cms.EDAnalyzer("TagProbeFitTreeProducer",
                                     tnpVars.mcTruthCommonStuff, tnpVars.CommonStuffForSuperClusterProbe, 
                                     tagProbePairs = cms.InputTag("tnpPairingEleRec"),
@@ -276,7 +270,7 @@ process.tnpEleReco = cms.EDAnalyzer("TagProbeFitTreeProducer",
         ),
 
                                     )
-print (" --- tnpEleReco with TagProbeFitTreeProducer worked")
+#print (" --- tnpEleReco with TagProbeFitTreeProducer worked")
 
 process.tnpEleIDs = cms.EDAnalyzer("TagProbeFitTreeProducer",
                                     tnpVars.mcTruthCommonStuff, tnpVars.CommonStuffForGsfElectronProbe,
@@ -346,8 +340,8 @@ process.tnpPhoIDs = cms.EDAnalyzer("TagProbeFitTreeProducer",
                                          passingMedium100XV2  = cms.InputTag("probePhoCutBasedMedium100XV2"),
                                          passingTight100XV2   = cms.InputTag("probePhoCutBasedTight100XV2"),
 
-                                         passingMVA94Xwp90 = cms.InputTag("probePhoMVA94Xwp90"),
-                                         passingMVA94Xwp80 = cms.InputTag("probePhoMVA94Xwp80"),
+#                                         passingMVA94Xwp90 = cms.InputTag("probePhoMVA94Xwp90"),
+#                                         passingMVA94Xwp80 = cms.InputTag("probePhoMVA94Xwp80"),
 
                                          passingMVA94XV2wp90 = cms.InputTag("probePhoMVA94XV2wp90"),
                                          passingMVA94XV2wp80 = cms.InputTag("probePhoMVA94XV2wp80"),
@@ -376,10 +370,11 @@ if options['addSUSY'] :
 
 tnpSetup.customize( process.tnpEleTrig , options )
 tnpSetup.customize( process.tnpEleIDs  , options )
+#print ("next step: tnpSetup.customize for pho ID.. did it work?")
 tnpSetup.customize( process.tnpPhoIDs  , options )
-print ("next step: tnpSetup.customize ")
+#print ("yes pho id worked... next step: tnpSetup.customize for ele reco")
 tnpSetup.customize( process.tnpEleReco , options )
-print ("tnpSetup.customize worked")
+#print ("tnpSetup.customize ele reco also worked")
 
 
 process.tree_sequence = cms.Sequence()
@@ -402,7 +397,7 @@ if (not options['DEBUG']):
 
 process.evtCounter = cms.EDAnalyzer('SimpleEventCounter')
 
-print ("next do process.p")
+#print ("next do process.p")
 process.p = cms.Path(
         process.evtCounter        +
         process.hltFilter         +
@@ -412,7 +407,7 @@ process.p = cms.Path(
         process.tree_sequence 
         )
 
-print (" --- process.p successful")
+#print (" --- process.p successful")
 
 process.TFileService = cms.Service(
     "TFileService", fileName = cms.string(options['OUTPUT_FILE_NAME']),
