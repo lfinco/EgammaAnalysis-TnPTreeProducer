@@ -150,10 +150,20 @@ else:
     options['OUTPUT_FILE_NAME']    = "TnPTree_data.root"
 
 
-options['TnPPATHS']            = cms.vstring("HLT_Ele32_WPTight_Gsf*")#UL 2018
-options['TnPHLTTagFilters']    = cms.vstring()
+#options['TnPPATHS']            = cms.vstring("HLT_Ele32_WPTight_Gsf*")#UL 2018
+#options['TnPHLTTagFilters']    = cms.vstring()
+#options['TnPHLTProbeFilters']  = cms.vstring()
+#options['HLTFILTERTOMEASURE']  = cms.vstring()
+
+#options['TnPPATHS']            = cms.vstring("HLT_Ele32_WPTight_Gsf*")#UL 2018
+#options['TnPHLTTagFilters']    = cms.vstring("hltEle32WPTightGsfTrackIsoFilter","hltEGL1SingleEGOrFilter")
+#options['TnPHLTProbeFilters']  = cms.vstring()
+#options['HLTFILTERTOMEASURE']  = cms.vstring("hltEle32WPTightGsfTrackIsoFilter")
+
+options['TnPPATHS']            = cms.vstring("HLT_Ele32_WPTight_Gsf_v*")#UL 2018
+options['TnPHLTTagFilters']    = cms.vstring("hltEle32WPTightGsfTrackIsoFilter")
 options['TnPHLTProbeFilters']  = cms.vstring()
-options['HLTFILTERTOMEASURE']  = cms.vstring()
+options['HLTFILTERTOMEASURE']  = cms.vstring("hltEle32WPTightGsfTrackIsoFilter")
 
 ###options['GLOBALTAG']           = 'auto:run2_data'
 
