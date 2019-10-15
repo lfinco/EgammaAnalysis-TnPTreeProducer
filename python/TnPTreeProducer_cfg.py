@@ -53,7 +53,7 @@ varOptions.register(
 
 #### HLTname is HLT2 in reHLT samples
 varOptions.register(
-    "HLTname", "HLT",
+    "HLTname", "reHLT",
     VarParsing.multiplicity.singleton,
     VarParsing.varType.string,
     "HLT process name (default HLT)"
