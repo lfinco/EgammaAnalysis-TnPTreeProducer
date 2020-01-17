@@ -84,6 +84,14 @@ varOptions.register(
     "use AOD"
     )
 
+varOptions.register(
+    "L1Threshold", 0,
+    VarParsing.multiplicity.singleton,
+    VarParsing.varType.int,
+    "Threshold for L1 matched objects"
+    )
+
+
 varOptions.parseArguments()
 
 
@@ -168,6 +176,8 @@ else:
                                   } 
     options['GLOBALTAG']           = 'auto:run2_data'
 
+options['L1Threshold'] = varOptions.L1Threshold
+
 if varOptions.GT != "auto" :
     options['GLOBALTAG'] = varOptions.GT
 
@@ -243,6 +253,7 @@ if options['DoRECO']                          : process.cand_sequence += process
 
 process.tnpPairs_sequence = cms.Sequence()
 if options['DoTrigger'] : process.tnpPairs_sequence *= process.tnpPairingEleHLT
+if options['DoTrigger'] : process.tnpPairs_sequence *= process.tnpPairingEleHLTL1matched
 if options['DoRECO']    : process.tnpPairs_sequence *= process.tnpPairingEleRec
 if options['DoEleID']   : process.tnpPairs_sequence *= process.tnpPairingEleIDs
 if options['DoPhoID']   : process.tnpPairs_sequence *= process.tnpPairingPhoIDs
@@ -260,14 +271,30 @@ process.tnpEleTrig = cms.EDAnalyzer("TagProbeFitTreeProducer",
                                     probeMatches  = cms.InputTag("genProbeEle"),
                                     allProbes     = cms.InputTag("probeEle"),
                                     flags = cms.PSet(
-                                        #passingHLT        = cms.InputTag("probeElePassHLT"),
                                         passingLoose94X   = cms.InputTag("probeEleCutBasedLoose94X" ),
                                         passingMedium94X  = cms.InputTag("probeEleCutBasedMedium94X"),
                                         passingTight94X   = cms.InputTag("probeEleCutBasedTight94X" ),
                                         ),
                                     )
+
+process.tnpEleTrigL1matched = cms.EDAnalyzer("TagProbeFitTreeProducer",
+                                    tnpVars.CommonStuffForGsfElectronProbe, tnpVars.mcTruthCommonStuff,
+                                    tagProbePairs = cms.InputTag("tnpPairingEleHLTL1matched"),
+                                    probeMatches  = cms.InputTag("genProbeEleL1matched"),
+                                    allProbes     = cms.InputTag("probeEleL1matched"),
+                                    flags = cms.PSet(
+                                        passingLoose94X   = cms.InputTag("probeEleCutBasedLoose94X" ),
+                                        passingMedium94X  = cms.InputTag("probeEleCutBasedMedium94X"),
+                                        passingTight94X   = cms.InputTag("probeEleCutBasedTight94X" ),
+                                        ),
+                                    )
+
+
 for flag in options['HLTFILTERSTOMEASURE']:
   setattr(process.tnpEleTrig.flags, flag, cms.InputTag(flag))
+  setattr(process.tnpEleTrigL1matched.flags, flag, cms.InputTag(flag))
+
+
 
   
 process.tnpEleReco = cms.EDAnalyzer("TagProbeFitTreeProducer",
@@ -380,6 +407,7 @@ if options['addSUSY'] :
 
 
 tnpSetup.customize( process.tnpEleTrig , options )
+tnpSetup.customize( process.tnpEleTrigL1matched , options )
 tnpSetup.customize( process.tnpEleIDs  , options )
 tnpSetup.customize( process.tnpPhoIDs  , options )
 tnpSetup.customize( process.tnpEleReco , options )
@@ -387,6 +415,7 @@ tnpSetup.customize( process.tnpEleReco , options )
 
 process.tree_sequence = cms.Sequence()
 if (options['DoTrigger']): process.tree_sequence *= process.tnpEleTrig
+if (options['DoTrigger']): process.tree_sequence *= process.tnpEleTrigL1matched
 if (options['DoRECO'])   : process.tree_sequence *= process.tnpEleReco
 if (options['DoEleID'])  : process.tree_sequence *= process.tnpEleIDs
 if (options['DoPhoID'])  : process.tree_sequence *= process.tnpPhoIDs

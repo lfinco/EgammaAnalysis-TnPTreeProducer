@@ -71,13 +71,15 @@ def setGoodParticlesMiniAOD(process, options):
                                           conversions      = cms.InputTag("reducedEgamma:reducedConversions"),
                                           #pfCandColl       = cms.InputTag("packedPFCandidates"),
                                           )
+    
 
     ####################  Electron collection
     process.goodElectrons = cms.EDFilter("PATElectronRefSelector",
                                          src = cms.InputTag( options['ELECTRON_COLL'] ),
                                          cut = cms.string(   options['ELECTRON_CUTS'] ),
                                          )
-    
+
+     
     ####################  Photon collection
     process.goodPhotons   =  cms.EDFilter("PATPhotonRefSelector",
                                             src = cms.InputTag( options['PHOTON_COLL'] ),
@@ -154,6 +156,7 @@ def setGoodParticlesAOD(process, options):
                                          cut = cms.string(options['ELECTRON_CUTS'])
                                          )
 
+   
     ####################  Photon collection
     ### dummy in AOD (use miniAOD for photons)
     process.goodPhotons    =  cms.EDFilter("PhotonRefSelector",

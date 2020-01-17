@@ -40,16 +40,45 @@ def setTagsProbes(process, options):
     process.probeEle             = process.tagEle.clone()
     process.probeEle.filterNames = cms.vstring(options['TnPHLTProbeFilters'])
     process.probeEle.inputs      = cms.InputTag("goodElectrons")  
+  
+
+
+    ######added by me
+    ################# PROBE Matched to L1 #######################
+    
+    process.goodElectronProbesL1= cms.EDProducer("PatElectronL1Stage2CandProducer",
+                                                inputs = cms.InputTag("goodElectrons"),
+                                                objects = cms.InputTag("caloStage2Digis:EGamma"),
+                                                minET = cms.double(options['L1Threshold']), #lead eff only
+                                                dRmatch = cms.double(0.2), #match L1 online to hlt in EB
+                                                dRmatchEE = cms.double(0.2), #match L1 online to hlt in EE
+                                                isolatedOnly = cms.bool(False)
+    )
+
+    process.probeEleL1matched             = process.tagEle.clone()
+    process.probeEleL1matched.filterNames = cms.vstring(options['TnPHLTProbeFilters'])
+    process.probeEleL1matched.inputs      = cms.InputTag("goodElectronProbesL1")
 
     ################# PROBE ELECTRONs passHLT #######################
+
+    
     process.probeElePassHLT              = process.tagEle.clone()
     process.probeElePassHLT.inputs       = cms.InputTag("probeEle")  
-    #process.probeElePassHLT.filterNames  = cms.vstring(options['HLTFILTERSTOMEASURE'])
     process.probeElePassHLT.isAND        = cms.bool(False)
+
+    #probably not needed
+    #process.probeElePassHLTL1matched              = process.tagEle.clone()
+    #process.probeElePassHLTL1matched.inputs       = cms.InputTag("probeEleL1matched")  
+    #process.probeElePassHLTL1matched.isAND        = cms.bool(False)
 
     for flag, filterNames in options['HLTFILTERSTOMEASURE'].iteritems():
         setattr(process, flag, process.probeElePassHLT.clone(filterNames=filterNames))
-    
+        #probably not needed:
+        #setattr(process, flag + "L1matched", process.probeElePassHLTL1matched.clone(filterNames=filterNames))
+
+        #setattr(process, flag, process.probeElePassHLTL1matched.clone(filterNames=filterNames)) #if I add this, I guess I'm introducing on all probes (not only the ones I called probeElepassHLTL1matched) the L1 matching requirement (but only in the numerator, so the efficiency goes down)
+
+
     ###################### PROBE PHOTONs ############################
     process.probePho  = cms.EDProducer( gamHLTProducer,
                                         filterNames = options['TnPHLTProbeFilters'],
@@ -100,15 +129,21 @@ def setTagsProbes(process, options):
                                             resolveByMatchQuality = cms.bool(True),  # False = just match input in order; True = pick lowest deltaR pair first
                                             )        
         
-        process.genProbeEle  = process.genTagEle.clone( src = cms.InputTag("probeEle") )
-        process.genProbePho  = process.genTagEle.clone( src = cms.InputTag("probePho") )
-        process.genProbeSC   = process.genTagEle.clone( src = cms.InputTag("probeSC")  )
+        process.genProbeEle           = process.genTagEle.clone( src = cms.InputTag("probeEle") )
+        process.genProbeEleL1matched  = process.genTagEle.clone( src = cms.InputTag("probeEleL1matched") )
+        process.genProbePho           = process.genTagEle.clone( src = cms.InputTag("probePho") )
+        process.genProbeSC            = process.genTagEle.clone( src = cms.InputTag("probeSC")  )
     
         
     ########################### TnP pairs ############################
     masscut = cms.string("50<mass<130")         
     process.tnpPairingEleHLT   = cms.EDProducer("CandViewShallowCloneCombiner",
-                                        decay = cms.string("tagEle@+ probeEle@-"), 
+                                                decay = cms.string("tagEle@+ probeEle@-"), 
+                                                checkCharge = cms.bool(True),
+                                                cut = masscut,
+                                        )
+    process.tnpPairingEleHLTL1matched   = cms.EDProducer("CandViewShallowCloneCombiner",
+                                        decay = cms.string("tagEle@+ probeEleL1matched@-"), 
                                         checkCharge = cms.bool(True),
                                         cut = masscut,
                                         )
@@ -204,7 +239,9 @@ def setSequences(process, options):
         process.probeEleMVA94Xwp90isoV2        +
         process.probeEleMVA94Xwp80isoV2        +
         process.probeEleMVA94XwpHZZisoV2        +
-        process.probeEle 
+        process.goodElectronProbesL1          +
+        process.probeEleL1matched                    +
+        process.probeEle
         )
     if not options['useAOD'] : process.ele_sequence += process.probeEleHLTsafe
 
@@ -237,12 +274,12 @@ def setSequences(process, options):
     process.hlt_sequence = cms.Sequence()
     for flag in options['HLTFILTERSTOMEASURE']:
         process.hlt_sequence += getattr(process, flag)
-
-
+        #process.hlt_sequence += getattr(process, flag + "L1matched")
 
     if options['isMC'] :
         process.tag_sequence += process.genEle + process.genTagEle 
         process.ele_sequence += process.genProbeEle
+        process.ele_sequence += process.genProbeEleL1matched
         process.pho_sequence += process.genProbePho
         process.sc_sequence  += process.genProbeSC
 
