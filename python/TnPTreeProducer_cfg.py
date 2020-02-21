@@ -17,21 +17,21 @@ varOptions.register(
     )
 
 varOptions.register(
-    "doEleID", True,
+    "doEleID", False,
     VarParsing.multiplicity.singleton,
     VarParsing.varType.bool,
     "Include tree for photon ID SF"
     )
 
 varOptions.register(
-    "doPhoID", True,
+    "doPhoID", False,
     VarParsing.multiplicity.singleton,
     VarParsing.varType.bool,
     "Include tree for photon ID SF"
     )
 
 varOptions.register(
-    "doTrigger", False,
+    "doTrigger", True,
     VarParsing.multiplicity.singleton,
     VarParsing.varType.bool,
     "Include tree for Trigger SF"
@@ -85,6 +85,14 @@ varOptions.register(
     "use AOD"
     )
 
+varOptions.register(
+    "L1Threshold", 0,
+    VarParsing.multiplicity.singleton,
+    VarParsing.varType.int,
+    "Threshold for L1 matched objects"
+    )
+
+
 varOptions.parseArguments()
 
 
@@ -131,29 +139,29 @@ if (varOptions.isMC):
     options['isMC']                = cms.bool(True)
     options['OUTPUT_FILE_NAME']    = "TnPTree_mc.root"
     if varOptions.isAOD :  options['OUTPUT_FILE_NAME']    = "TnPTree_mc_aod.root"
-#    options['TnPPATHS']            = cms.vstring("HLT*")
-#    options['TnPHLTTagFilters']    = cms.vstring()
-#    options['TnPHLTProbeFilters']  = cms.vstring()
-#    options['HLTFILTERTOMEASURE']  = cms.vstring("")
-    options['TnPPATHS']            = cms.vstring("HLT_Ele27_eta2p1_WPTight_Gsf_v*") #FOR 2016
-    options['TnPHLTTagFilters']    = cms.vstring("hltEle27erWPTightGsfTrackIsoFilter") #FOR 2016
-    options['HLTFILTERTOMEASURE']  = cms.vstring("hltEle27erWPTightGsfTrackIsoFilter") #FOR 2016
-#    options['TnPPATHS']            = cms.vstring("HLT_Ele32_WPTight_Gsf_L1DoubleEG_v*")
-#    options['TnPHLTTagFilters']    = cms.vstring("hltEle32L1DoubleEGWPTightGsfTrackIsoFilter","hltEGL1SingleEGOrFilter")
-    #options['TnPHLTTagFilters']    = cms.vstring("hltEle32L1DoubleEGWPTightGsfTrackIsoFilter")
-    options['TnPHLTProbeFilters']  = cms.vstring()
-#    options['HLTFILTERTOMEASURE']  = cms.vstring("hltEle32L1DoubleEGWPTightGsfTrackIsoFilter")
     options['GLOBALTAG']           = 'auto:run2_mc'
 else:
     options['OUTPUT_FILE_NAME']    = "TnPTree_data.root"
-    options['TnPPATHS']            = cms.vstring("HLT_Ele27_eta2p1_WPTight_Gsf_v*") #FOR 2016
-    options['TnPHLTTagFilters']    = cms.vstring("hltEle27erWPTightGsfTrackIsoFilter") #FOR 2016
-#    options['TnPPATHS']            = cms.vstring("HLT_Ele32_WPTight_Gsf_L1DoubleEG_v*")
-#    options['TnPHLTTagFilters']    = cms.vstring("hltEle32L1DoubleEGWPTightGsfTrackIsoFilter","hltEGL1SingleEGOrFilter")
-    #options['TnPHLTTagFilters']    = cms.vstring("hltEle32L1DoubleEGWPTightGsfTrackIsoFilter")
-    options['TnPHLTProbeFilters']  = cms.vstring()
-    options['HLTFILTERTOMEASURE']  = cms.vstring("hltEle32L1DoubleEGWPTightGsfTrackIsoFilter")
     options['GLOBALTAG']           = 'auto:run2_data'
+
+
+options['TnPPATHS']            = cms.vstring("HLT_Ele27_WPTight_Gsf_v*") #FOR 2016
+options['TnPHLTTagFilters']    = cms.vstring("hltEle27WPTightGsfTrackIsoFilter") #FOR 2016
+
+options['TnPHLTProbeFilters']  = cms.vstring()
+options['HLTFILTERSTOMEASURE']  = {
+    
+    "passHltEle27WPTightGsf" :            cms.vstring("hltEle27WPTightGsfTrackIsoFilter"),#2016
+    
+    "passHltEle23Ele12CaloIdLTrackIdLIsoVLLeg1" : cms.vstring("hltEle23Ele12CaloIdLTrackIdLIsoVLTrackIsoLeg1Filter"),
+    "passHltEle23Ele12CaloIdLTrackIdLIsoVLLeg1L1match" : cms.vstring("hltEle23Ele12CaloIdLTrackIdLIsoVLTrackIsoLeg1Filter"),
+    "passHltEle23Ele12CaloIdLTrackIdLIsoVLLeg2" : cms.vstring("hltEle23Ele12CaloIdLTrackIdLIsoVLTrackIsoLeg2Filter"),
+    "passHltDoubleEle33CaloIdLMWSeedLeg" : cms.vstring("hltEG33CaloIdLMWPMS2Filter"),
+    "passHltDoubleEle33CaloIdLMWSeedLegL1match" : cms.vstring("hltEG33CaloIdLMWPMS2Filter"),
+    "passHltDoubleEle33CaloIdLMWUnsLeg" : cms.vstring("hltDiEle33CaloIdLMWPMS2UnseededFilter"),
+} 
+
+options['L1Threshold'] = varOptions.L1Threshold
 
 if varOptions.GT != "auto" :
     options['GLOBALTAG'] = varOptions.GT
@@ -231,6 +239,7 @@ if options['DoRECO']                          : process.cand_sequence += process
 
 process.tnpPairs_sequence = cms.Sequence()
 if options['DoTrigger'] : process.tnpPairs_sequence *= process.tnpPairingEleHLT
+if options['DoTrigger'] : process.tnpPairs_sequence *= process.tnpPairingEleHLTL1matched
 if options['DoRECO']    : process.tnpPairs_sequence *= process.tnpPairingEleRec
 if options['DoEleID']   : process.tnpPairs_sequence *= process.tnpPairingEleIDs
 if options['DoPhoID']   : process.tnpPairs_sequence *= process.tnpPairingPhoIDs
@@ -248,12 +257,31 @@ process.tnpEleTrig = cms.EDAnalyzer("TagProbeFitTreeProducer",
                                     probeMatches  = cms.InputTag("genProbeEle"),
                                     allProbes     = cms.InputTag("probeEle"),
                                     flags = cms.PSet(
-                                        passingHLT        = cms.InputTag("probeElePassHLT"),
+                                        #passingHLT        = cms.InputTag("probeElePassHLT"),
                                         passingLoose94X   = cms.InputTag("probeEleCutBasedLoose94X" ),
                                         passingMedium94X  = cms.InputTag("probeEleCutBasedMedium94X"),
                                         passingTight94X   = cms.InputTag("probeEleCutBasedTight94X" ),
                                         ),
                                     )
+
+process.tnpEleTrigL1matched = cms.EDAnalyzer("TagProbeFitTreeProducer",
+                                    tnpVars.CommonStuffForGsfElectronProbe, tnpVars.mcTruthCommonStuff,
+                                    tagProbePairs = cms.InputTag("tnpPairingEleHLTL1matched"),
+                                    probeMatches  = cms.InputTag("genProbeEleL1matched"),
+                                    allProbes     = cms.InputTag("probeEleL1matched"),
+                                    flags = cms.PSet(
+                                        passingLoose94X   = cms.InputTag("probeEleCutBasedLoose94X" ),
+                                        passingMedium94X  = cms.InputTag("probeEleCutBasedMedium94X"),
+                                        passingTight94X   = cms.InputTag("probeEleCutBasedTight94X" ),
+                                        ),
+                                    )
+
+
+for flag in options['HLTFILTERSTOMEASURE']:
+  setattr(process.tnpEleTrig.flags, flag, cms.InputTag(flag))
+  setattr(process.tnpEleTrigL1matched.flags, flag, cms.InputTag(flag))
+
+
 
 process.tnpEleReco = cms.EDAnalyzer("TagProbeFitTreeProducer",
                                     tnpVars.mcTruthCommonStuff, tnpVars.CommonStuffForSuperClusterProbe, 
@@ -365,6 +393,7 @@ if options['addSUSY'] :
 
 
 tnpSetup.customize( process.tnpEleTrig , options )
+tnpSetup.customize( process.tnpEleTrigL1matched , options )
 tnpSetup.customize( process.tnpEleIDs  , options )
 tnpSetup.customize( process.tnpPhoIDs  , options )
 tnpSetup.customize( process.tnpEleReco , options )
@@ -372,6 +401,7 @@ tnpSetup.customize( process.tnpEleReco , options )
 
 process.tree_sequence = cms.Sequence()
 if (options['DoTrigger']): process.tree_sequence *= process.tnpEleTrig
+#if (options['DoTrigger']): process.tree_sequence *= process.tnpEleTrigL1matched
 if (options['DoRECO'])   : process.tree_sequence *= process.tnpEleReco
 if (options['DoEleID'])  : process.tree_sequence *= process.tnpEleIDs
 if (options['DoPhoID'])  : process.tree_sequence *= process.tnpPhoIDs
