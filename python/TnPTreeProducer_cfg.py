@@ -155,8 +155,14 @@ if (varOptions.isMC):
                                    "passHltEle32DoubleEGWPTightGsf" :            cms.vstring("hltEle32L1DoubleEGWPTightGsfTrackIsoFilter"),#2017
                                    "passEGL1SingleEGOr" :                        cms.vstring("hltEGL1SingleEGOrFilter"),#2017
                                    "passHltEle23Ele12CaloIdLTrackIdLIsoVLLeg1" : cms.vstring("hltEle23Ele12CaloIdLTrackIdLIsoVLTrackIsoLeg1Filter"),
+                                   "passHltEle23Ele12CaloIdLTrackIdLIsoVLLeg1L1match" : cms.vstring("hltEle23Ele12CaloIdLTrackIdLIsoVLTrackIsoLeg1Filter"),
                                    "passHltEle23Ele12CaloIdLTrackIdLIsoVLLeg2" : cms.vstring("hltEle23Ele12CaloIdLTrackIdLIsoVLTrackIsoLeg2Filter"),
-                                  } 
+                                   "passHltDoubleEle33CaloIdLMWSeedLeg" : cms.vstring("hltEle33CaloIdLMWPMS2Filter"),
+                                   "passHltDoubleEle33CaloIdLMWSeedLegL1match" : cms.vstring("hltEle33CaloIdLMWPMS2Filter"),
+                                   "passHltDoubleEle33CaloIdLMWUnsLeg" : cms.vstring("hltDiEle33CaloIdLMWPMS2UnseededFilter"),
+                                   
+
+    } 
 
 
     options['GLOBALTAG']           = 'auto:run2_mc'
@@ -170,10 +176,17 @@ else:
 
                                    "passHltEle32DoubleEGWPTightGsf" :            cms.vstring("hltEle32L1DoubleEGWPTightGsfTrackIsoFilter"),#2017
                                    "passEGL1SingleEGOr" :                        cms.vstring("hltEGL1SingleEGOrFilter"),#2017
-                                  
                                    "passHltEle23Ele12CaloIdLTrackIdLIsoVLLeg1" : cms.vstring("hltEle23Ele12CaloIdLTrackIdLIsoVLTrackIsoLeg1Filter"),
+                                   "passHltEle23Ele12CaloIdLTrackIdLIsoVLLeg1L1match" : cms.vstring("hltEle23Ele12CaloIdLTrackIdLIsoVLTrackIsoLeg1Filter"),
                                    "passHltEle23Ele12CaloIdLTrackIdLIsoVLLeg2" : cms.vstring("hltEle23Ele12CaloIdLTrackIdLIsoVLTrackIsoLeg2Filter"),
-                                  } 
+                                   "passHltDoubleEle33CaloIdLMWSeedLeg" : cms.vstring("hltEle33CaloIdLMWPMS2Filter"),
+                                   "passHltDoubleEle33CaloIdLMWSeedLegL1match" : cms.vstring("hltEle33CaloIdLMWPMS2Filter"),
+                                   "passHltDoubleEle33CaloIdLMWUnsLeg" : cms.vstring("hltDiEle33CaloIdLMWPMS2UnseededFilter"),
+                                   
+
+
+
+    } 
     options['GLOBALTAG']           = 'auto:run2_data'
 
 options['L1Threshold'] = varOptions.L1Threshold
@@ -415,7 +428,7 @@ tnpSetup.customize( process.tnpEleReco , options )
 
 process.tree_sequence = cms.Sequence()
 if (options['DoTrigger']): process.tree_sequence *= process.tnpEleTrig
-if (options['DoTrigger']): process.tree_sequence *= process.tnpEleTrigL1matched
+#if (options['DoTrigger']): process.tree_sequence *= process.tnpEleTrigL1matched
 if (options['DoRECO'])   : process.tree_sequence *= process.tnpEleReco
 if (options['DoEleID'])  : process.tree_sequence *= process.tnpEleIDs
 if (options['DoPhoID'])  : process.tree_sequence *= process.tnpPhoIDs

@@ -1,13 +1,13 @@
 #!/bin/env python
 
 ### Version of submission ###
-submitVersion = "test"
+submitVersion = "L1Matching"
 
 
 
 defaultArgs   = ['isMC=True','doEleID=False','doPhoID=False','doTrigger=True', 'GT=94X_mc2017_realistic_v11']
 #mainOutputDir = '/store/user/tomc/tnpTuples/%s' % submitVersion # Change to your own
-mainOutputDir = '/store/group/phys_egamma/lfinco/2017/L1Matching/%s' % submitVersion
+mainOutputDir = '/store/group/phys_egamma/lfinco/new/2017/%s' % submitVersion
 from WMCore.Configuration import Configuration
 from CRABClient.UserUtilities import config
 config = config()
@@ -76,16 +76,39 @@ if __name__ == '__main__':
       print "Failed submitting task: %s" % (cle)
     #print name + '_%s_%s' % (leg1threshold, leg2threshold)#sample.split('/')[-3] + '_%s_%s' % (leg1threshold, leg2threshold)
       
+  from multiprocessing import Process
+  def submitWrapper(config, sample, name, leg1threshold, leg2threshold):
+    p = Process(target=submit, args=(config, sample, name, leg1threshold, leg2threshold))
+    p.start()
+    p.join()
+
+
 #leg1_thresh_list = [18, 22, 24, 25]
  
 #for leg1 in leg1_thresh_list:
     # Crab fails on this on second iteration, of course with only a very cryptic error message
     # Not sure how to workaround this
-  
-submit(config, '/DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v1/MINIAODSIM','DY1JetsToLL_M50_madgraphMLM', 25, 0)
-submit(config, '/DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_v3_94X_mc2017_realistic_v14_ext1-v2/MINIAODSIM','DY1JetsToLL_M50_madgraphMLM_ext', 25, 0)
-submit(config, '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM', 'DYJetsToLL_M50_amcatnloFXFX',25, 0)
-submit(config, '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM','DYJetsToLL_M50_amcatnloFXFX_ext', 25, 0)
+
+  submitWrapper(config, '/DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v1/MINIAODSIM','DY1JetsToLL_M50_madgraphMLM', 18, 0)
+  submitWrapper(config, '/DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_v3_94X_mc2017_realistic_v14_ext1-v2/MINIAODSIM','DY1JetsToLL_M50_madgraphMLM_ext', 18, 0)
+  submitWrapper(config, '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM', 'DYJetsToLL_M50_amcatnloFXFX',18, 0)
+  submitWrapper(config, '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM','DYJetsToLL_M50_amcatnloFXFX_ext', 18, 0)
+
+
+  submitWrapper(config, '/DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v1/MINIAODSIM','DY1JetsToLL_M50_madgraphMLM', 22, 0)
+  submitWrapper(config, '/DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_v3_94X_mc2017_realistic_v14_ext1-v2/MINIAODSIM','DY1JetsToLL_M50_madgraphMLM_ext', 22, 0)
+  submitWrapper(config, '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM', 'DYJetsToLL_M50_amcatnloFXFX',22, 0)
+  submitWrapper(config, '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM','DYJetsToLL_M50_amcatnloFXFX_ext', 22, 0)
+
+  submitWrapper(config, '/DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v1/MINIAODSIM','DY1JetsToLL_M50_madgraphMLM', 24, 0)
+  submitWrapper(config, '/DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_v3_94X_mc2017_realistic_v14_ext1-v2/MINIAODSIM','DY1JetsToLL_M50_madgraphMLM_ext', 24, 0)
+  submitWrapper(config, '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM', 'DYJetsToLL_M50_amcatnloFXFX',24, 0)
+  submitWrapper(config, '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM','DYJetsToLL_M50_amcatnloFXFX_ext', 24, 0)
+
+  submitWrapper(config, '/DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v1/MINIAODSIM','DY1JetsToLL_M50_madgraphMLM', 25, 0)
+  submitWrapper(config, '/DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_v3_94X_mc2017_realistic_v14_ext1-v2/MINIAODSIM','DY1JetsToLL_M50_madgraphMLM_ext', 25, 0)
+  submitWrapper(config, '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM', 'DYJetsToLL_M50_amcatnloFXFX',25, 0)
+  submitWrapper(config, '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM','DYJetsToLL_M50_amcatnloFXFX_ext', 25, 0)
  
 
 

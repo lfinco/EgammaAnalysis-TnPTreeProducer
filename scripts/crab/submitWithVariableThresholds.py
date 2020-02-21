@@ -1,13 +1,13 @@
 #!/bin/env python
 
 ### Version of submission ###
-submitVersion = "testL1"
+submitVersion = "L1Matching"
 
 
 
 defaultArgs   = ['isMC=False','doEleID=False','doPhoID=False','doTrigger=True', 'GT=94X_dataRun2_ReReco_EOY17_v6']
 #mainOutputDir = '/store/user/tomc/tnpTuples/%s' % submitVersion # Change to your own
-mainOutputDir = '/store/group/phys_egamma/lfinco/2017/L1Matching/%s' % submitVersion
+mainOutputDir = '/store/group/phys_egamma/lfinco/new/2017/%s' % submitVersion
 from WMCore.Configuration import Configuration
 from CRABClient.UserUtilities import config
 config = config()
@@ -102,15 +102,23 @@ if __name__ == '__main__':
     except ClientException as cle:
       print "Failed submitting task: %s" % (cle)
 
+  from multiprocessing import Process
+  def submitWrapper(config, sample, leg1threshold, leg2threshold, json):
+    p = Process(target=submit, args=(config, sample, leg1threshold, leg2threshold, json))
+    p.start()
+    p.join()
+
+
   for leg1, leg2, json in getSeedsForDoubleEle('2017'):
     print leg1, leg2, json
       # Crab fails on this on second iteration, of course with only a very cryptic error message
     # Not sure how to workaround this
-    #submit(config, '/SingleElectron/Run2017B-31Mar2018-v1/MINIAOD', leg1, leg2, json)
-    #submit(config, '/SingleElectron/Run2017C-31Mar2018-v1/MINIAOD', leg1, leg2, json)
-    #submit(config, '/SingleElectron/Run2017D-31Mar2018-v1/MINIAOD', leg1, leg2, json)
-    #submit(config, '/SingleElectron/Run2017E-31Mar2018-v1/MINIAOD', leg1, leg2, json)
-    #submit(config, '/SingleElectron/Run2017F-31Mar2018-v1/MINIAOD', leg1, leg2, json)
+    print 'Submitting for (%s, %s)' % (leg1, leg2)
+    submitWrapper(config, '/SingleElectron/Run2017B-31Mar2018-v1/MINIAOD', leg1, leg2, json)
+    submitWrapper(config, '/SingleElectron/Run2017C-31Mar2018-v1/MINIAOD', leg1, leg2, json)
+    submitWrapper(config, '/SingleElectron/Run2017D-31Mar2018-v1/MINIAOD', leg1, leg2, json)
+    submitWrapper(config, '/SingleElectron/Run2017E-31Mar2018-v1/MINIAOD', leg1, leg2, json)
+    submitWrapper(config, '/SingleElectron/Run2017F-31Mar2018-v1/MINIAOD', leg1, leg2, json)
   
 
 
